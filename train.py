@@ -109,5 +109,8 @@ if __name__ == "__main__":
     # List the contents of the current working directory
     directory_contents = os.listdir(current_directory)
 
+    app_contents = os.listdir("/app/")
+
     print(f"current_directory: {current_directory}")
     print(f"directory_contents: {directory_contents}")
+    print(f"/app/: {app_contents}")
