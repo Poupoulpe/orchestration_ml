@@ -78,7 +78,7 @@ if __name__ == "__main__":
         X_train,
         y_train,
         validation_data=(X_test, y_test),
-        epochs=20,
+        epochs=1,
         batch_size=32,
     )
 
@@ -99,4 +99,4 @@ if __name__ == "__main__":
     print(f"R-squared Score: {r2}")
 
     # Save Model
-    model.save(f"/app/lstm.keras")
+    model.save("/app/lstm.keras")
