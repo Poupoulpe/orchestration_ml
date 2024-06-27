@@ -99,4 +99,4 @@ if __name__ == "__main__":
     print(f"R-squared Score: {r2}")
 
     # Save Model
-    model.save(f"./static/models/lstm_v1.keras")
+    model.save("./lstm.keras")
