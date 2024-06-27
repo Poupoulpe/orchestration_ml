@@ -1,0 +1,42 @@
+id: build-docker-image 
+namespace: esgi.iabd
+description: Build Docker image from repo andpostit to Artifact  Registry 
+
+labels:
+  env: dev
+  project: weather-forecast
+
+inputs:
+  - id: version
+    type: STRING
+    defaults: 0.0.1
+    
+tasks:
+  - id: workingDirectory
+    type: io.kestra.plugin.core.flow.WorkingDirectory
+    tasks:
+      - id: cloneRepository
+        type: io.kestra.plugin.git.Clone
+        url: https://github.com/Florent-COMPAGNONI/orchestration_ml.git
+        branch: feature/train_flow
+
+      - id: print
+        type: io.kestra.plugin.core.debug.Echo
+        format: "{{ env.SECRET_GCP_SA_KEY }}"
+      
+      - id: fetchAuthToken
+        type: io.kestra.plugin.gcp.auth.OauthAccessToken
+        projectId: weather-forecast-427613
+        serviceAccount: '{{ secret("GCP_SA_KEY2") }}'
+
+      - id: buildDockerImage
+        type: "io.kestra.plugin.docker.Build"
+        dockerfile: Dockerfile
+        platforms:
+        - linux/amd64
+        tags: 
+        - europe-west9-docker.pkg.dev/weather-forecast-427613/app/app_image:{{ inputs.version }}
+        push: true
+        credentials:
+          username: oauth2accesstoken
+          password: "{{ outputs.fetchAuthToken.accessToken.tokenValue }}"
