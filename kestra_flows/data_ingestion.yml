@@ -1,0 +1,61 @@
+id: data_ingestion
+namespace: dev
+description: Fetch weather data from Open Meteo API, process the response, and upload the CSV to a bucket
+
+triggers:
+  - id: schedule
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: "*/10 * * * *"  # Trigger every 10 minutes
+
+tasks:
+  - id: weather_api
+    type: io.kestra.plugin.core.http.Request
+    uri: https://archive-api.open-meteo.com/v1/archive
+    method: GET
+    contentType: application/json
+    headers:
+      Accept: application/json
+    timeout: 30000
+
+  - id: log_response
+    type: io.kestra.plugin.core.log.Log
+    message: "{{ outputs.weather_api.body }}"
+
+  - id: process_response
+    type: io.kestra.plugin.scripts.python.Script
+    inputFiles:
+      weather_data.json: |
+        {{ outputs.weather_api.body }}
+    script: |
+      import json
+      import csv
+
+      # Load the weather data
+      with open('weather_data.json') as json_file:
+        data = json.load(json_file)
+
+      # Define CSV file columns
+      csv_columns = data['columns']
+      
+      # Extract the relevant weather data
+      weather_data = data['data']
+
+      # Write data to CSV file
+      csv_file = 'weather_data.csv'
+      with open(csv_file, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(csv_columns)  # Write the column headers
+        writer.writerows(weather_data)  # Write the data rows
+
+    outputFiles:
+      - weather_data.csv
+
+  - id: log_csv_creation
+    type: io.kestra.plugin.core.log.Log
+    message: "Weather data has been saved to weather_data.csv"
+
+  - id: upload_csv_to_bucket
+    type: io.kestra.plugin.gcp.gcs.Upload
+    from: "weather_data.csv"
+    to: "gs://easgi-iabd-weather-data/weather_data.csv"
+    serviceAccount: "{{ envs.gcp_sa_key }}"
