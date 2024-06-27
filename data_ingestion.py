@@ -75,7 +75,7 @@ hourly_data = {
     "date": pd.date_range(
         start=yesterday_start,
         end=yesterday_end,
-        freq='H',  # Set frequency to hourly
+        freq='h',  # Set frequency to hourly
         inclusive="left"
 )}
 hourly_data["temperature_2m"] = hourly_temperature_2m
