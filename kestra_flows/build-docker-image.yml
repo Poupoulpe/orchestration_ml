@@ -19,15 +19,11 @@ tasks:
         type: io.kestra.plugin.git.Clone
         url: https://github.com/Florent-COMPAGNONI/orchestration_ml.git
         branch: feature/train_flow
-
-      - id: print
-        type: io.kestra.plugin.core.debug.Echo
-        format: "{{ env.SECRET_GCP_SA_KEY }}"
       
       - id: fetchAuthToken
         type: io.kestra.plugin.gcp.auth.OauthAccessToken
         projectId: weather-forecast-427613
-        serviceAccount: '{{ secret("GCP_SA_KEY2") }}'
+        serviceAccount: '{{ env.SECRET_GCP_SA_KEY }}'
 
       - id: buildDockerImage
         type: "io.kestra.plugin.docker.Build"

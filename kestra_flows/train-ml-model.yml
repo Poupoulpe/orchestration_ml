@@ -1,0 +1,25 @@
+id: train-ml-model
+namespace: esgi.iabd
+description: Read training data, train model, upload model 
+
+labels:
+  env: dev
+  project: weather-forecast
+
+inputs:
+  - id: file_name
+    type: STRING
+    defaults: "data_06_23_to_06_24.csv"
+
+tasks:
+  - id: workingDirectory
+    type: io.kestra.plugin.core.flow.WorkingDirectory
+    tasks:
+    - id: downloadDataset
+      type: "io.kestra.plugin.gcp.gcs.Download"
+      from: "gs://easgi-iabd-weather-data/historical_data/data_06_23_to_06_24.csv"
+      serviceAccount: "{{ envs.gcp_sa_key }}"
+    
+    
+
+      
