@@ -114,5 +114,5 @@ hourly_data["soil_moisture_100_to_255cm"] = hourly_soil_moisture_100_to_255cm
 daily_dataframe = pd.DataFrame(data=hourly_data)
 print(daily_dataframe)
 csv_file = f"weather_data_{two_day_ago.strftime('%Y_%m_%d')}.csv"
-daily_dataframe.to_csv(csv_file, header=True)
+daily_dataframe.to_csv(csv_file, header=True, encoding="utf8")
 print(f"Weather data has been saved to {csv_file}")
