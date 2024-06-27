@@ -78,7 +78,7 @@ if __name__ == "__main__":
         X_train,
         y_train,
         validation_data=(X_test, y_test),
-        epochs=1,
+        epochs=20,
         batch_size=32,
     )
 
@@ -100,17 +100,3 @@ if __name__ == "__main__":
 
     # Save Model
     model.save("./lstm.keras")
-
-    import os
-
-    # Get current working directory
-    current_directory = os.getcwd()
-
-    # List the contents of the current working directory
-    directory_contents = os.listdir(current_directory)
-
-    app_contents = os.listdir("/app/")
-
-    print(f"current_directory: {current_directory}")
-    print(f"directory_contents: {directory_contents}")
-    print(f"/app/: {app_contents}")

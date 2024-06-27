@@ -22,7 +22,7 @@ tasks:
     projectId: weather-forecast-427613
     serviceAccount: '{{ envs.gcp_sa_key }}'
 
-  - id: run-script
+  - id: runScript
     type: "io.kestra.plugin.docker.Run"
     containerImage: europe-west9-docker.pkg.dev/weather-forecast-427613/app/app_image:0.0.1
     commands:
@@ -33,9 +33,10 @@ tasks:
       username: oauth2accesstoken
       password: "{{ outputs.fetchAuthToken.accessToken.tokenValue }}"
     outputFiles:
-      - "/app/lstm.keras"
+      - lstm.keras
 
   - id: upload
     type: io.kestra.plugin.gcp.gcs.Upload
-    from: "{{ outputs.run-script.outputFiles[0].uri }}"
+    from: "{{ outputs.runScript.outputFiles['lstm.keras'] }}"
     to: "gs://esgi-iabd-weather-models/lstm.keras"
+    serviceAccount: "{{ envs.gcp_sa_key }}"
