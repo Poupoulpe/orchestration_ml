@@ -31,7 +31,7 @@ params = {
 }
 
 # Make the API request
-response = openmeteo.request(method='GET', url=url, params=params)
+response = openmeteo.weather_api(url=url, params=params)
 
 # Check if the request was successful
 if response.status_code == 200:
