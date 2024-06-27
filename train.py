@@ -100,3 +100,14 @@ if __name__ == "__main__":
 
     # Save Model
     model.save("/app/lstm.keras")
+
+    import os
+
+    # Get current working directory
+    current_directory = os.getcwd()
+
+    # List the contents of the current working directory
+    directory_contents = os.listdir(current_directory)
+
+    print(f"current_directory: {current_directory}")
+    print(f"directory_contents: {directory_contents}")

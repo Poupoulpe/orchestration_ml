@@ -33,4 +33,9 @@ tasks:
       username: oauth2accesstoken
       password: "{{ outputs.fetchAuthToken.accessToken.tokenValue }}"
     outputFiles:
-      - /app/lstm.keras
+      - "/app/lstm.keras"
+
+  - id: upload
+    type: io.kestra.plugin.gcp.gcs.Upload
+    from: "{{ outputs.run-script.outputFiles[0].uri }}"
+    to: "gs://esgi-iabd-weather-models/lstm.keras"
