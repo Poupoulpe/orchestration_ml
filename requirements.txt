@@ -7,3 +7,4 @@ tensorflow-cpu
 scikit-learn
 
 fastapi
+streamlit~=1.36.0
