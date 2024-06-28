@@ -5,3 +5,5 @@ numpy
 pandas
 tensorflow-cpu
 scikit-learn
+
+streamlit~=1.36.0
