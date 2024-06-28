@@ -30,7 +30,6 @@ def main():
                         fetch.get('predictions').replace("[", "").replace("]", "").replace(" ", "").split(",")]
 
     if temperatures:
-        print(len(temperatures))
         # Creating a DataFrame for visualization
         df = pd.DataFrame({
             'Hour': range(len(temperatures)),
@@ -38,8 +37,14 @@ def main():
         })
 
         hour = st.sidebar.slider("hour", 0, 23)
+        hour_string = str(hour % 12) + ' pm' if hour > 12 else str(hour) + ' am'
 
-        # Displaying the temperature data as a line chart
+        st.header('Look close by hour', divider='rainbow')
+        st.subheader(f"At {hour_string} :sunglasses:")
+        temp = temperatures[hour]
+        st.markdown(f"The temperature should be at ***{temp} °C***")
+
+        st.header('About today\'s temperature', divider='rainbow')
         st.subheader('Line Chart of Temperatures')
         st.line_chart(data=df.set_index('Hour'), y_label="Temperature", x_label="Hour")
 
